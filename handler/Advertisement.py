@@ -30,14 +30,14 @@ class Advertisement:
 
         soup = BeautifulSoup(content, features="lxml")
 
-        # for i in range(3):
         name: str
         href: str
         description: str
         price: int
 
         # parse description
-        for j, tag_div in enumerate(soup.findAll(attrs={'class': 'iva-item-root-_lk9K photo-slider-slider-S15A_ iva-item-list-rfgcH iva-item-redesign-rop6P iva-item-responsive-_lbhG items-item-My3ih items-listItem-Gd1jN js-catalog-item-enum'})):
+        for j, tag_div in enumerate(soup.findAll(attrs={
+            'class': 'iva-item-root-_lk9K photo-slider-slider-S15A_ iva-item-list-rfgcH iva-item-redesign-rop6P iva-item-responsive-_lbhG items-item-My3ih items-listItem-Gd1jN js-catalog-item-enum'})):
 
             # search url and name product
             name, href = self._get_name_href(tag_div)
@@ -67,7 +67,8 @@ class Advertisement:
                 return name, href
 
     def _get_descriptions(self, tag):
-        for tag_description in tag.findAll(attrs={'class': 'iva-item-text-Ge6dR iva-item-description-FDgK4 text-text-LurtD text-size-s-BxGpL'}):
+        for tag_description in tag.findAll(
+                attrs={'class': 'iva-item-text-Ge6dR iva-item-description-FDgK4 text-text-LurtD text-size-s-BxGpL'}):
             list_description = str(tag_description.text).split("\n")
             description = " ".join(list_description)
             print("description:\t", description)
@@ -79,5 +80,18 @@ class Advertisement:
             print("price:\t", price)
             return price
 
+    def get_urls(self, last_url) -> List[Temporary_advertisement] | None:
+        for i, ad in enumerate(self._advertisement):
+            if (ad.href == last_url) and (i == 0):
+                return None
+            elif (ad.href == last_url):
+                return self._advertisement[:i]
+        else:
+            return self._advertisement[:3]
+
+
+    def get_last_url(self) -> str:
+        return self._advertisement[0].href
+
 # &p=1 for speed
-probe = Advertisement("https://www.avito.ru/sankt_peterburg_i_lo/audio_i_video/naushniki-ASgBAgICAUSIAtRO?cd=1&f=ASgBAQECAUSIAtROAUDqvA0U_NE0AUXGmgwUeyJmcm9tIjowLCJ0byI6NjAwMH0&q=airpods&p=1&s=104&user=1")
+
