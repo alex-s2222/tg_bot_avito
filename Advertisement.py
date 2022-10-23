@@ -14,13 +14,13 @@ class Temporary_advertisement(NamedTuple):
 class Advertisement:
     _advertisement: List[Temporary_advertisement]
 
-    def __init__(self, url: str):
-        self._advertisement = self._start_driver(url=url)
+    def __init__(self, message_url: str):
+        self._advertisement = self._start_driver(message_url=message_url)
 
-    def _start_driver(self, url: str) -> List[Temporary_advertisement]:
+    def _start_driver(self, message_url: str) -> List[Temporary_advertisement]:
         # start driver
         driver = webdriver.Chrome(ChromeDriverManager().install())
-        driver.get(url)
+        driver.get(message_url)
         content = driver.page_source
         driver.close()
         return self._parse_url(content=content)
