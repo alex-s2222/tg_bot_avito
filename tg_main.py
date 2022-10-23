@@ -44,7 +44,7 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await update.message.reply_text(last_url)
             await asyncio.sleep(30)
 
-        output_message_at = get_url(avito_url, last_url=last_url)
+        output_message_at = get_url(avito_url)
 
         if output_message_at == '':
             await asyncio.sleep(60)

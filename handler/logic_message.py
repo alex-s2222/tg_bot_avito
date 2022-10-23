@@ -6,6 +6,8 @@ class Message(NamedTuple):
     amount: Optional[int]
     output_text: str
 
+class Last_at():
+    last_at: str
 
 # проверяем правильность url и коректируем
 def get_update_avito_url(tg_message: str) -> Message:
@@ -18,12 +20,14 @@ def get_update_avito_url(tg_message: str) -> Message:
 
 
 # парсим страницу и создаем сообщение для пользователя
-def get_url(tg_message: str, last_url=''):
+def get_url(tg_message: str):
     output_message = ''
     ad = Advertisement(tg_message)
-    list_ad_avito = ad.get_urls(last_url=last_url)
+    list_ad_avito = ad.get_urls(last_url=Last_at.last_at)
     if list_ad_avito is None:
         return output_message
+
+    Last_at.last_at = list_ad_avito[0].href
 
     for i in list_ad_avito:
         output_message += 'Обявление: ' + i.name + \
@@ -36,8 +40,8 @@ def get_url(tg_message: str, last_url=''):
 
 def update_last_url(tg_message: str) -> str:
     ad = Advertisement(tg_message)
-    last_url = ad.get_last_url()
-    return last_url
+    Last_at.last_at = ad.get_last_url()
+    return Last_at.last_at
 
 
 def _false_parse_message(_message: str) -> bool:
@@ -45,5 +49,4 @@ def _false_parse_message(_message: str) -> bool:
         return True
     else:
         return False
-
 
